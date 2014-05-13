@@ -1,0 +1,66 @@
+﻿@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Main.cshtml";
+}
+
+@section Javascript
+{
+    
+    <link rel="stylesheet" href="@Url.Content("/Content/spinner.css")" type="text/css"/>
+    <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false"></script>
+    <script type="text/javascript" src="@Url.Content("/Scripts/uiHelper.js")"></script>
+    <script type="text/javascript">
+        $(function () {
+            var $loading = $('#spinner');
+
+            $(document).ajaxStart(function () {
+                $loading.fadeIn('fast');
+            }).ajaxStop(function () {
+                $loading.stop().fadeOut('fast');
+            });
+            
+            initMap('@PageContext.Page.Request.UserHostAddress', 1);
+            $("#btnIp").click(function () {
+                initMap($('#ipInput').val(), 0);
+            });
+        });
+    </script>
+
+}
+
+<div class="container-fluid">
+    <div class="page-header">
+        <h1>Ubicar Dirección IP</h1>
+    </div>
+    <p>Su IP actual es <strong>@PageContext.Page.Request.UserHostAddress</strong> <b id="ipLocation">San Jose, Costa Rica</b></p>
+    <div class="row">
+        <div class="col-md-6 col-md-offset-3 col-xs-6 col-xs-offset-3 text-center">
+            <div class="form-inline">
+                <div class="form-group">
+                    <input type="text" class="form-control input-lg" id="ipInput" placeholder="Ingrese la dirección IP">
+                </div>
+                <div class="form-group">
+                    <button id="btnIp" type="button" class="btn btn-default btn-lg">Ubicar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6 col-md-offset-3 text-center spacer-20">
+            <h3><strong><a id="geoResult" href="javascript:google.maps.event.trigger(marker, 'click');"></a></strong></h3>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6 col-md-offset-3 spacer-20">
+            <div id="map-canvas"></div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6 col-md-offset-3 spacer-40 text-center">
+            <p>
+                <small>This product includes GeoLite data created by MaxMind, available from
+                    <a href="http://www.maxmind.com">http://www.maxmind.com</a>.</small>
+            </p>
+        </div>
+    </div>
+</div>
